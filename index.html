@@ -7,8 +7,33 @@
     <title>Library</title>
 </head>
 <body>
-    <h1>Welcome to my little Library!</h1>
-    <p>More to come soon...</p>
+    <h1>The Little Library</h1>
+    <div class = "container">
+    </div>
+    <br>
+    <div class="form-popup" id="myForm">
+        <form action="#" class="form-container">
+          <h2>New Book</h2>
+      
+          <label for="name" class="label"><b>Name</b></label>
+          <input type="text" placeholder="Enter Name" name="nameInput" required>
+      
+          <label for="author" class="label"><b>Author</b></label>
+          <input type="text" placeholder="Enter Author" name="authorInput" required>
+
+          <label for="pages" class="label"><b>Pages</b></label>
+          <input type="number" name="pagesInput" required>
+
+          <label for="isRead" class="label"><b>Have you read it?</b></label>
+          <input type="checkbox" name="isReadInput"><br><br>
+      
+          <button type="submit" class="submitBtn" onclick="submitForm()" onsubmit="return false">Submit</button>
+          <button type="submit" class="btn cancel" onclick="closeForm()" onsubmit="return false">Close</button>
+        </form>
+      </div> 
+    <div class="buttonContainer">
+        <button class="newButton" name="newButton" onclick="openForm()">New Book</button>
+    </div>
 </body>
 <script src="script.js"></script> 
 </html>
