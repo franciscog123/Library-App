@@ -12,7 +12,7 @@
     </div>
     <br>
     <div class="form-popup" id="myForm">
-        <form action="#" class="form-container">
+        <form class="form-container" onsubmit="return false">
           <h2>New Book</h2>
       
           <label for="name" class="label"><b>Name</b></label>
@@ -27,8 +27,8 @@
           <label for="isRead" class="label"><b>Have you read it?</b></label>
           <input type="checkbox" name="isReadInput"><br><br>
       
-          <button type="submit" class="submitBtn" onclick="submitForm()" onsubmit="return false">Submit</button>
-          <button type="submit" class="btn cancel" onclick="closeForm()" onsubmit="return false">Close</button>
+          <button type="submit" class="submitBtn" onclick="submitForm()">Submit</button>
+          <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
         </form>
       </div> 
     <div class="buttonContainer">

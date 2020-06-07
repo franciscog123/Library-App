@@ -6,6 +6,7 @@ let bookThree= new Book(`The HitchHiker's Guide to the Galaxy`, 'Arthur Dent', 2
 
 let myLibrary = [bookOne, bookTwo, bookThree];
 let table;
+let para;
 
 let container = document.querySelector('.container');
 
@@ -27,13 +28,24 @@ Book.prototype.info = function() {
     isRead: ${this.isRead}`;
 }
 
-render(myLibrary);
+//TODO change something?
 
+Book.prototype.toggleReadStatus = () => 
+{   
+    this.isRead = !this.isRead;
+}
+
+render(myLibrary);
 
 function addBookToLibrary(title, author, pages, isRead)
 {
+    if(myLibrary.length == 0)
+    {
+        para.remove();
+    }
     myLibrary.push(new Book(title, author, pages, isRead));
 }
+
 
 function render(array)
 {
@@ -60,7 +72,14 @@ function render(array)
             row.appendChild(header);
         }
 
+        //create an additional header for delete/edit buttons
+        header=document.createElement("th");
+        header.setAttribute("class","myTH");
+        row.appendChild(header);
+
         let cell;
+        let button;
+        let editButton;
 
         array.forEach((item, index)=> {
 
@@ -76,13 +95,44 @@ function render(array)
                 cell.setAttribute("class","myTD");
                 row.appendChild(cell);
             })
+
+            //generate remove buttons and add them as table data
+            cell=document.createElement("td");
+            cell.setAttribute("class","myTD");
             
+            button=document.createElement("button");
+            button.setAttribute("class", "removeButtons");
+            button.textContent="Remove";
+            cell.appendChild(button);
+            row.appendChild(cell);
+            
+            button.setAttribute("data-key", index);
+            button.addEventListener("click",deleteRow)
+            
+            //generate toggle readStatus button and add them to table
+            editButton=document.createElement("button");
+            editButton.setAttribute("class", "editReadButtons");
+            editButton.textContent="Edit Read";
+            cell.appendChild(editButton);
+
+            editButton.setAttribute("data-key", index);
+            editButton.addEventListener("click", (e) => {
+
+                let readStatusIndex=e.target.dataset.key;
+                let readStatus=myLibrary[readStatusIndex];
+                console.log("Changing\n"+readStatus.info());
+                //readStatus.toggleReadStatus();
+                myLibrary[readStatusIndex].toggleReadStatus();
+                console.log("Changed\n"+readStatus.info());
+                table.remove();
+                render(myLibrary);
+            })
         });
     }
     else
     {
         //let user know if no objects
-        let para = document.createElement("p");
+        para = document.createElement("p");
         para.setAttribute("id","myPara");
         para.textContent="Uh oh! You don't have any books. Try adding some."
         container.appendChild(para);
@@ -101,19 +151,22 @@ function closeForm() {
 function submitForm(e)
 {
     let nameInput=document.querySelector("input[name='nameInput']");
-    console.log(nameInput.value);
     let authorInput=document.querySelector("input[name='authorInput']");
-    console.log(authorInput.value);
     let pagesInput=document.querySelector("input[name='pagesInput']");
-    console.log(pagesInput.value);
     let isRead=document.querySelector("input[name='isReadInput']");
-    console.log(isRead.checked);
 
-    //TODO: check for empty input
-    if((nameInput!==null && nameInput !=="") && (authorInput !== null && authorInput !== "") && (pagesInput !== null && pagesInput !== ""))
+    if((nameInput.value !== null && nameInput.value !=="") && (authorInput.value !== null && authorInput.value !== "") && (pagesInput.value !== null && pagesInput.value !== ""))
     {
-        myLibrary.push(new Book(nameInput.value, authorInput.value, pagesInput.value, isRead.value));
+        addBookToLibrary(nameInput.value, authorInput.value, pagesInput.value, isRead.checked);
         table.remove();
         render(myLibrary);
     }
+}
+
+function deleteRow(e)
+{
+    let row=e.target.dataset.key;
+    myLibrary.splice(row,1)
+    table.remove();
+    render(myLibrary);
 }
