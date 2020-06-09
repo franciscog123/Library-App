@@ -2,14 +2,30 @@
 
 let para;
 
-let myLibrary = [];
+let myLibrary=JSON.parse(localStorage.getItem('library'));
 
-addBookToLibrary("War and Peace", "Leo Tolstoy", 1225, false);
-addBookToLibrary(`You don't know JS`, "Kyle Simpson", 67, false);
-addBookToLibrary(`The HitchHiker's Guide to the Galaxy`, 'Arthur Dent', 208, false);
+//remapping myLibrary array as a new book object. When the array is retrieved from localStorage, 
+//the prototype is lost since Json.parse only converts a JSON string into regular javascript object.
+//so the toggleReadStatus prototype method can't be called without this workaround. 
+myLibrary.forEach(function(item, index,arr)
+{
+    arr[index]=new Book(arr[index].title, arr[index].author,arr[index].pages, arr[index].isRead);
+})
+
+
+//adding books if there are none in localStorage
+if(myLibrary == null || myLibrary.length==0)
+{
+    addBookToLibrary("War and Peace", "Leo Tolstoy", 1225, false);
+    addBookToLibrary(`You don't know JS`, "Kyle Simpson", 67, false);
+    addBookToLibrary(`The HitchHiker's Guide to the Galaxy`, 'Arthur Dent', 208, false);
+}
+
+function populateStorage() {
+    localStorage.setItem('library', JSON.stringify(myLibrary));
+}
 
 let table;
-
 let container = document.querySelector('.container');
 
 //constructor
@@ -30,25 +46,24 @@ Book.prototype.info = function() {
     isRead: ${this.isRead}`;
 }
 
-//TODO change something?
-
 Book.prototype.toggleReadStatus = function() { 
     this.isRead = !this.isRead;
-    //Book.isRead = !Book.isRead;
+    populateStorage();
 }
 
 render(myLibrary);
 
+
 function addBookToLibrary(title, author, pages, isRead)
 {
-    if(myLibrary.length == 0)
+    if(myLibrary != null && myLibrary.length == 0)
     {
         if(para!=null)
-            para.remove();
+            para.remove();  
     }
     myLibrary.push(new Book(title, author, pages, isRead));
+    populateStorage();  
 }
-
 
 function render(array)
 {
@@ -101,7 +116,6 @@ function render(array)
                 cell=document.createElement("td");
                 cell.textContent=value;
                 cell.setAttribute("class","myTD");
-
 
                 //make the displayed content for isRead property a bit friendlier for users
                 if(cell.textContent == "true")
@@ -182,7 +196,11 @@ function submitForm(e)
     if((nameInput.value !== null && nameInput.value !=="") && (authorInput.value !== null && authorInput.value !== "") && (pagesInput.value !== null && pagesInput.value !== ""))
     {
         addBookToLibrary(nameInput.value, authorInput.value, pagesInput.value, isRead.checked);
-        table.remove();
+        nameInput.value="";
+        authorInput.value="";
+        pagesInput.value="";
+        if(typeof table !== 'undefined')
+            table.remove();
         render(myLibrary);
     }
 }
@@ -192,5 +210,6 @@ function deleteRow(e)
     let row=e.target.dataset.key;
     myLibrary.splice(row,1)
     table.remove();
+    populateStorage();
     render(myLibrary);
 }
