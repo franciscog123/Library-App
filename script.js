@@ -1,12 +1,14 @@
 "use strict";
 
-let bookOne = new Book("War and Peace","Leo Tolstoy", 1225, false);
-let bookTwo= new Book(`You don't know JS`, "Kyle Simpson", 67, false);
-let bookThree= new Book(`The HitchHiker's Guide to the Galaxy`, 'Arthur Dent', 208, false);
-
-let myLibrary = [bookOne, bookTwo, bookThree];
-let table;
 let para;
+
+let myLibrary = [];
+
+addBookToLibrary("War and Peace", "Leo Tolstoy", 1225, false);
+addBookToLibrary(`You don't know JS`, "Kyle Simpson", 67, false);
+addBookToLibrary(`The HitchHiker's Guide to the Galaxy`, 'Arthur Dent', 208, false);
+
+let table;
 
 let container = document.querySelector('.container');
 
@@ -30,9 +32,9 @@ Book.prototype.info = function() {
 
 //TODO change something?
 
-Book.prototype.toggleReadStatus = () => 
-{   
+Book.prototype.toggleReadStatus = function() { 
     this.isRead = !this.isRead;
+    //Book.isRead = !Book.isRead;
 }
 
 render(myLibrary);
@@ -41,7 +43,8 @@ function addBookToLibrary(title, author, pages, isRead)
 {
     if(myLibrary.length == 0)
     {
-        para.remove();
+        if(para!=null)
+            para.remove();
     }
     myLibrary.push(new Book(title, author, pages, isRead));
 }
@@ -81,18 +84,56 @@ function render(array)
         let button;
         let editButton;
 
-        array.forEach((item, index)=> {
+        array.forEach((item, index)=> 
+        {
 
             //generate rows
             row = document.createElement("tr");
             row.setAttribute("class","myTR");
             table.appendChild(row);
 
+            let i;//variable for google icon
+            let text;
+
             //generate values for each row
-            Object.values(item).forEach((value)=> {
+            Object.values(item).forEach((value)=> 
+            {
                 cell=document.createElement("td");
                 cell.textContent=value;
                 cell.setAttribute("class","myTD");
+
+
+                //make the displayed content for isRead property a bit friendlier for users
+                if(cell.textContent == "true")
+                {
+                    cell.textContent="yes"
+                }
+                else if(cell.textContent == "false")
+                {
+                    cell.textContent="no"
+                }
+
+                if(cell.textContent=="yes"||cell.textContent=="no")
+                {
+                    //generate google material icon and use it as toggle read status button
+                    i = document.createElement('i');
+                    i.className = 'material-icons';   
+                    text = document.createTextNode('edit');
+                    i.appendChild(text);
+                    cell.appendChild(i);
+                    row.appendChild(cell);
+
+                    i.setAttribute("data-key", index);
+                    i.addEventListener("click", (e) => {
+
+                        let readStatusIndex=e.target.dataset.key;
+                        let readStatus=myLibrary[readStatusIndex];
+                        myLibrary[readStatusIndex].toggleReadStatus();
+                        table.remove();
+                        render(myLibrary);
+                    });
+                }
+
                 row.appendChild(cell);
             })
 
@@ -100,33 +141,17 @@ function render(array)
             cell=document.createElement("td");
             cell.setAttribute("class","myTD");
             
-            button=document.createElement("button");
-            button.setAttribute("class", "removeButtons");
-            button.textContent="Remove";
-            cell.appendChild(button);
+            //add google material icon and use it as delete button
+            i = document.createElement('i');
+            i.className = 'material-icons';   
+            text = document.createTextNode('delete');
+            i.appendChild(text);
+            cell.appendChild(i);
             row.appendChild(cell);
-            
-            button.setAttribute("data-key", index);
-            button.addEventListener("click",deleteRow)
-            
-            //generate toggle readStatus button and add them to table
-            editButton=document.createElement("button");
-            editButton.setAttribute("class", "editReadButtons");
-            editButton.textContent="Edit Read";
-            cell.appendChild(editButton);
 
-            editButton.setAttribute("data-key", index);
-            editButton.addEventListener("click", (e) => {
+            i.setAttribute("data-key", index);
+            i.addEventListener("click", deleteRow);
 
-                let readStatusIndex=e.target.dataset.key;
-                let readStatus=myLibrary[readStatusIndex];
-                console.log("Changing\n"+readStatus.info());
-                //readStatus.toggleReadStatus();
-                myLibrary[readStatusIndex].toggleReadStatus();
-                console.log("Changed\n"+readStatus.info());
-                table.remove();
-                render(myLibrary);
-            })
         });
     }
     else
@@ -146,7 +171,6 @@ function openForm() {
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
 }
-
 
 function submitForm(e)
 {
