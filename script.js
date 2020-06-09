@@ -4,15 +4,6 @@ let para;
 
 let myLibrary=JSON.parse(localStorage.getItem('library'));
 
-//remapping myLibrary array as a new book object. When the array is retrieved from localStorage, 
-//the prototype is lost since Json.parse only converts a JSON string into regular javascript object.
-//so the toggleReadStatus prototype method can't be called without this workaround. 
-myLibrary.forEach(function(item, index,arr)
-{
-    arr[index]=new Book(arr[index].title, arr[index].author,arr[index].pages, arr[index].isRead);
-})
-
-
 //adding books if there are none in localStorage
 if(myLibrary == null || myLibrary.length==0)
 {
@@ -24,6 +15,14 @@ if(myLibrary == null || myLibrary.length==0)
 function populateStorage() {
     localStorage.setItem('library', JSON.stringify(myLibrary));
 }
+
+//remapping myLibrary array as a new book object. When the array is retrieved from localStorage, 
+//the prototype is lost since Json.parse only converts a JSON string into regular javascript object.
+//so the toggleReadStatus prototype method can't be called without this workaround. 
+myLibrary.forEach(function(item, index,arr)
+{
+    arr[index]=new Book(arr[index].title, arr[index].author,arr[index].pages, arr[index].isRead);
+})
 
 let table;
 let container = document.querySelector('.container');
