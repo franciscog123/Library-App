@@ -61,6 +61,8 @@ function addBookToLibrary(title, author, pages, isRead)
         if(para!=null)
             para.remove();  
     }
+    if(myLibrary==null)
+        myLibrary=[];
     myLibrary.push(new Book(title, author, pages, isRead));
     populateStorage();  
 }
