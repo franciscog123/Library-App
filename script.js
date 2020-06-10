@@ -2,7 +2,8 @@
 
 let para;
 
-let myLibrary=JSON.parse(localStorage.getItem('library'));
+let myLibrary=[];
+myLibrary=JSON.parse(localStorage.getItem('library'));
 
 //adding books if there are none in localStorage
 if(myLibrary == null || myLibrary.length==0)
