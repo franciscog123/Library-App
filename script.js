@@ -25,7 +25,8 @@ myLibrary.forEach(function(item, index,arr)
     arr[index]=new Book(arr[index].title, arr[index].author,arr[index].pages, arr[index].isRead);
 })
 
-let table;
+let booksContainer;
+//let table;
 let container = document.querySelector('.container');
 
 //constructor
@@ -72,102 +73,76 @@ function render(array)
     //if array isn't empty, display objects in table
     if(Array.isArray(array) && array.length)
     {
-        table=document.createElement("Table");
-        table.setAttribute("class","myTable");
-        container.appendChild(table);
+        booksContainer=document.createElement("div");
+        booksContainer.setAttribute("class", "booksContainer");
+        container.append(booksContainer);
 
-        let header;
-        let row;
+        let card;
 
-        row = document.createElement("tr");
-            row.setAttribute("class","myTR");
-            table.appendChild(row);
-
-        //generate table headers
-        for (let value of Object.keys(new Book)) 
-        {
-            header=document.createElement("th");
-            header.setAttribute("class","myTH");
-            header.textContent=value.charAt(0).toUpperCase()+value.substring(1);
-            row.appendChild(header);
-        }
-
-        //create an additional header for delete/edit buttons
-        header=document.createElement("th");
-        header.setAttribute("class","myTH");
-        row.appendChild(header);
-
-        let cell;
-        let button;
-        let editButton;
-
+        //generateBookCards
         array.forEach((item, index)=> 
         {
+            card = document.createElement("div");
+            card.setAttribute("class","bookCard");
+            booksContainer.appendChild(card);
 
-            //generate rows
-            row = document.createElement("tr");
-            row.setAttribute("class","myTR");
-            table.appendChild(row);
+            let bookCardTop=document.createElement("div");
+            bookCardTop.setAttribute("class","bookCard-top");
+            card.appendChild(bookCardTop);
 
-            let i;//variable for google icon
-            let text;
-
-            //generate values for each row
-            Object.values(item).forEach((value)=> 
-            {
-                cell=document.createElement("td");
-                cell.textContent=value;
-                cell.setAttribute("class","myTD");
-
-                //make the displayed content for isRead property a bit friendlier for users
-                if(cell.textContent == "true")
-                {
-                    cell.textContent="yes"
-                }
-                else if(cell.textContent == "false")
-                {
-                    cell.textContent="no"
-                }
-
-                if(cell.textContent=="yes"||cell.textContent=="no")
-                {
-                    //generate google material icon and use it as toggle read status button
-                    i = document.createElement('i');
-                    i.className = 'material-icons';   
-                    text = document.createTextNode('edit');
-                    i.appendChild(text);
-                    cell.appendChild(i);
-                    row.appendChild(cell);
-
-                    i.setAttribute("data-key", index);
-                    i.addEventListener("click", (e) => {
-
-                        let readStatusIndex=e.target.dataset.key;
-                        let readStatus=myLibrary[readStatusIndex];
-                        myLibrary[readStatusIndex].toggleReadStatus();
-                        table.remove();
-                        render(myLibrary);
-                    });
-                }
-
-                row.appendChild(cell);
-            })
-
-            //generate remove buttons and add them as table data
-            cell=document.createElement("td");
-            cell.setAttribute("class","myTD");
-            
             //add google material icon and use it as delete button
-            i = document.createElement('i');
-            i.className = 'material-icons';   
-            text = document.createTextNode('delete');
+            let i = document.createElement('i');
+            i.className = 'material-icons md-18';   
+            let text = document.createTextNode('delete');
             i.appendChild(text);
-            cell.appendChild(i);
-            row.appendChild(cell);
-
+            bookCardTop.appendChild(i);
             i.setAttribute("data-key", index);
             i.addEventListener("click", deleteRow);
 
+            let title=document.createElement("div");
+            title.setAttribute("class", "title");
+            title.textContent=item.title;
+            bookCardTop.appendChild(title);
+
+            let author = document.createElement("div");
+            author.setAttribute("class","author");
+            author.textContent=item.author;
+            bookCardTop.appendChild(author);
+
+            let bookCardBottom=document.createElement("div");
+            bookCardBottom.setAttribute("class", "bookCard-bottom");
+            card.appendChild(bookCardBottom);
+
+            let pages=document.createElement("div");
+            pages.setAttribute("class","pages");
+            pages.textContent=item.pages;
+            bookCardBottom.appendChild(pages);
+
+            let isReadDiv=document.createElement("div");
+            isReadDiv.setAttribute("class","isRead");
+            isReadDiv.textContent="Read it?"
+            bookCardBottom.appendChild(isReadDiv);
+
+            //add isRead button and use it an edit button to modify the isRead status
+            let isReadButton = document.createElement('button');
+            isReadButton.className = 'isReadButton';   
+            isReadButton.textContent=item.isRead;
+            isReadDiv.appendChild(isReadButton);
+
+            isReadButton.setAttribute("data-key", index);
+            isReadButton.addEventListener("click", (e) => {
+
+                let readStatusIndex=e.target.dataset.key;
+                let readStatus=myLibrary[readStatusIndex];
+                myLibrary[readStatusIndex].toggleReadStatus();
+                booksContainer.remove();
+                render(myLibrary);
+            });
+
+            if (isReadButton.textContent=="false")
+            isReadButton.textContent="no";
+            else if (isReadButton.textContent=="true")
+            isReadButton.textContent="yes";
         });
     }
     else
@@ -201,8 +176,8 @@ function submitForm(e)
         nameInput.value="";
         authorInput.value="";
         pagesInput.value="";
-        if(typeof table !== 'undefined')
-            table.remove();
+        if(typeof booksContainer !== 'undefined')
+            booksContainer.remove();
         render(myLibrary);
     }
 }
@@ -211,7 +186,7 @@ function deleteRow(e)
 {
     let row=e.target.dataset.key;
     myLibrary.splice(row,1)
-    table.remove();
+    booksContainer.remove();
     populateStorage();
     render(myLibrary);
 }

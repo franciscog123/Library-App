@@ -20,33 +20,6 @@ h1, h2
     justify-content: center;  
 }
 
-.myTable
-{
-    border-collapse: collapse;
-    width: 100%;
-    text-align:left;
-}
-
-.myTH, .myTD
-{
-    height: 50px;
-    padding: 15px;
-    text-align:left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: bottom
-}
-
-.myTR:nth-child(even) 
-{
-    background-color: #f2f2f2;
-} 
-
-.myTH
-{
-    background-color:teal;
-    color:white;
-}
-
 .buttonContainer
 {
     justify-content: right;
@@ -229,6 +202,7 @@ h1, h2
     border-radius: 5px;
     box-shadow: 2px 0 8px 0 rgba(0, 0, 0, 0.2);
     font-weight: bold;
+    margin-left: 5px;
 }
 
 .isReadButton:hover
