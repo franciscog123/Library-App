@@ -6,11 +6,12 @@
 body
 {
     text-align: center;
+    background-color: #855E42;;
 }
 
 h1, h2
 {
-    color:#618685;
+    color:#CC9900;
 }
 
 .container
@@ -55,7 +56,7 @@ h1, h2
 .newButton
 {
     color:white;
-    background-color: teal;;
+    background-color: #CC6600;;
     padding: 16px 20px;
     border: none;
     cursor: pointer;
@@ -101,7 +102,7 @@ h1, h2
   }
 
   .form-container .submitBtn {
-    background-color:teal;
+    background-color:#663300;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -141,9 +142,108 @@ h1, h2
     padding: 0px;
 }
 
+
 .material-icons
 {
+    display: inline !important;
     cursor: pointer;
-    color: navy;
-    padding-left: 4px;
+    color: brown;
+    text-align: right;
+    font-size: 1px;
+    align-items: right;
+    justify-content: right;
+    justify-items: right;
+}
+
+.material-icons.md-18 { font-size: 18px; }
+
+.booksContainer
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: #855E42;
+    margin: auto;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.bookCard
+{
+    display: flex;
+    flex-direction: column;
+    width:200px;
+    height: 250px;
+    margin: 15px;
+    padding: 10px;
+    border-radius:10px;
+    text-align: center;
+    box-shadow: 8px 5px 15px rgba(0, 0, 0, 0.6);
+    background-color: #FFEBCF;
+    justify-content: flex-start;
+    overflow-wrap: break-word;
+    overflow:auto;
+}
+
+.bookCard:hover
+{
+    transform:scale(1.1);
+}
+
+.title
+{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px;
+    letter-spacing: 0.1rem;
+    line-height: 1;
+}
+
+.author
+{
+    font-size: .9em;
+    font-weight: italic;
+    margin:12px;
+    letter-spacing: 0.1rem;
+}
+
+.pages
+{
+    font-size:.85em;
+    padding-bottom: 5%;
+}
+
+.isRead
+{
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.isReadButton
+{
+    background-color: #df8e46;
+    color: #F1D1B5;
+    border-radius: 5px;
+    box-shadow: 2px 0 8px 0 rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+.isReadButton:hover
+{
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.bookCard-top
+{
+    height: 75%;
+    overflow:auto;
+}
+
+.bookCard-bottom
+{
+    height:25%;
 }
